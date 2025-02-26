@@ -1,7 +1,8 @@
-<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;"><video style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" controls>
-<source src="https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/starter-lesson-2.mp4" type="video/mp4"/>
-<source src="https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/starter-lesson-2.webm" type="video/webm"/>
-</video></div>
+[![Watch the course intro video](https://img.shields.io/badge/Watch-Course%20Intro%20Video-blue)](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/starter-lesson-2.mp4)
+
+*You can access the course intro video directly here:*
+- [MP4 Format](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/starter-lesson-2.mp4)
+- [WebM Format](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/starter-lesson-2.webm)
 
 # Setting Up Git and GitHub: A Developer's Foundation
 
