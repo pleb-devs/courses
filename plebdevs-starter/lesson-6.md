@@ -4,7 +4,6 @@
 - [MP4 Format](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/starter-lesson-5.mp4)
 - [WebM Format](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/starter-lesson-5.webm)
 
-
 # JavaScript: Building Your First Interactive Web App
 
 ## Introduction
