@@ -40,11 +40,391 @@ We're building a tool that:
 - Provides user-friendly error messages
 - Demonstrates professional data handling
 
+## Key Concepts Explained
+
+This lesson focuses on mastering text manipulation and pattern recognition - essential skills for handling Bitcoin addresses, Lightning invoices, and transaction data:
+
+### String Methods: Professional Text Manipulation
+JavaScript provides a comprehensive toolkit for working with text data, crucial for Bitcoin applications:
+
+```javascript
+let invoice = "  lnbc1500n1pd7jnx9etjv4ehxcqzpgxqyz5vqsp5...  ";
+let address = "bc1q742d6ccq93c9cxh6f5nj8c6fshw2dlwun7ekn9qwf37cu2rn755upcp6el";
+let txid = "A1B2C3D4E5F6789012345678901234567890123456789012345678901234567890";
+
+// Basic string cleaning and formatting
+invoice.trim();                    // "lnbc1500n1pd7jnx9etjv4ehxcqzpgxqyz5vqsp5..."
+invoice.toLowerCase();             // Convert to lowercase
+invoice.toUpperCase();             // Convert to uppercase
+address.toLowerCase();             // Normalize Bitcoin addresses
+
+// String inspection methods
+console.log(invoice.length);       // Get string length
+console.log(invoice.startsWith("lnbc"));    // true - Lightning mainnet invoice
+console.log(invoice.startsWith("lntb"));    // false - not testnet
+console.log(address.startsWith("bc1"));     // true - SegWit address
+console.log(address.startsWith("1"));       // false - not legacy address
+console.log(txid.endsWith("7890"));         // true - ends with specific chars
+console.log(invoice.includes("1500"));      // true - contains amount
+
+// String extraction and slicing
+let addressPrefix = address.substring(0, 4);        // "bc1q" - first 4 chars
+let addressSuffix = address.slice(-8);               // Last 8 characters
+let shortAddress = address.slice(0, 6) + "..." + address.slice(-6); // "bc1q74...cp6el"
+let invoiceAmount = invoice.substring(4, 8);         // Extract amount portion
+
+// Advanced string manipulation
+let parts = address.split('q');              // Split on 'q': ["bc1", "742d6ccq93c9cxh6f5nj8c6fshw2dlwun7ekn9qwf37cu2rn755upcp6el"]
+let rejoined = parts.join('q');              // Rejoin: original address
+let padded = "123".padStart(8, '0');         // "00000123" - pad with zeros
+let formatted = "1234567890".replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // "123-456-7890"
+
+// Real Bitcoin string processing examples
+function formatBitcoinAddress(address) {
+    if (!address) return '';
+    
+    // Normalize to lowercase for processing
+    const normalized = address.toLowerCase().trim();
+    
+    // Format for display (show first 6 and last 6 characters)
+    if (normalized.length > 20) {
+        return `${normalized.substring(0, 6)}...${normalized.slice(-6)}`;
+    }
+    
+    return normalized;
+}
+
+function extractInvoiceAmount(invoice) {
+    // Lightning invoice format: lnbc[amount][multiplier]1[data]
+    const match = invoice.match(/^ln(bc|tb)(\d+)([munp])?1/);
+    if (!match) return null;
+    
+    const amount = parseInt(match[2]);
+    const multiplier = match[3];
+    
+    // Convert to satoshis based on multiplier
+    const multipliers = {
+        'm': 100000,    // milli-bitcoin (0.001 BTC)
+        'u': 100,       // micro-bitcoin (0.000001 BTC)  
+        'n': 0.1,       // nano-bitcoin (0.000000001 BTC)
+        'p': 0.0001     // pico-bitcoin (0.000000000001 BTC)
+    };
+    
+    const satoshis = multiplier ? amount * multipliers[multiplier] : amount;
+    return Math.round(satoshis);
+}
+
+function parseTransactionId(input) {
+    // Clean and validate transaction ID
+    const cleaned = input.trim().toLowerCase();
+    
+    // Bitcoin transaction IDs are 64 character hex strings
+    if (cleaned.length !== 64) {
+        throw new Error('Transaction ID must be 64 characters');
+    }
+    
+    if (!/^[a-f0-9]{64}$/.test(cleaned)) {
+        throw new Error('Transaction ID must contain only hexadecimal characters');
+    }
+    
+    return cleaned;
+}
+```
+
+### Regular Expressions: Advanced Pattern Matching
+Regular expressions (regex) are powerful tools for finding, validating, and extracting patterns from text:
+
+```javascript
+// Basic regex patterns for Bitcoin
+const patterns = {
+    // Bitcoin address patterns
+    legacyAddress: /^[13][a-km-z1-9]{25,34}$/i,
+    segwitAddress: /^bc1q[a-z0-9]{39}$/i,
+    taprootAddress: /^bc1p[a-z0-9]{59}$/i,
+    
+    // Lightning invoice patterns
+    mainnetInvoice: /^lnbc[0-9]+[munp]?1[a-z0-9]+$/i,
+    testnetInvoice: /^lntb[0-9]+[munp]?1[a-z0-9]+$/i,
+    
+    // Transaction ID pattern
+    transactionId: /^[a-f0-9]{64}$/i,
+    
+    // Bitcoin amount pattern (up to 8 decimal places)
+    bitcoinAmount: /^\d+(\.\d{1,8})?$/,
+    
+    // Hexadecimal pattern
+    hexString: /^[a-f0-9]+$/i
+};
+
+// Using regex for validation
+function validateBitcoinAddress(address) {
+    const cleaned = address.trim();
+    
+    // Test against all known address patterns
+    const addressPatterns = [
+        patterns.legacyAddress,
+        patterns.segwitAddress,
+        patterns.taprootAddress
+    ];
+    
+    return addressPatterns.some(pattern => pattern.test(cleaned));
+}
+
+function validateLightningInvoice(invoice) {
+    const cleaned = invoice.trim().toLowerCase();
+    
+    return patterns.mainnetInvoice.test(cleaned) || 
+           patterns.testnetInvoice.test(cleaned);
+}
+
+// Advanced regex with capture groups
+function parseInvoiceDetails(invoice) {
+    // Regex with capture groups to extract parts
+    const invoiceRegex = /^ln(bc|tb)(\d+)([munp])?1([a-z0-9]+)$/i;
+    const match = invoice.match(invoiceRegex);
+    
+    if (!match) {
+        return { valid: false, error: 'Invalid invoice format' };
+    }
+    
+    const [fullMatch, network, amount, multiplier, data] = match;
+    
+    return {
+        valid: true,
+        network: network === 'bc' ? 'mainnet' : 'testnet',
+        rawAmount: parseInt(amount),
+        multiplier: multiplier || '',
+        data: data,
+        fullInvoice: fullMatch
+    };
+}
+
+// Regex for data extraction
+function extractBitcoinAmounts(text) {
+    // Find all Bitcoin amounts in text
+    const amountRegex = /(\d+(?:\.\d{1,8})?)\s*(btc|bitcoin|₿)/gi;
+    const matches = [];
+    let match;
+    
+    while ((match = amountRegex.exec(text)) !== null) {
+        matches.push({
+            amount: parseFloat(match[1]),
+            unit: match[2].toLowerCase(),
+            position: match.index
+        });
+    }
+    
+    return matches;
+}
+
+function extractAddresses(text) {
+    // Extract all Bitcoin addresses from text
+    const addressRegex = /\b(bc1[a-z0-9]{39,59}|[13][a-km-z1-9]{25,34})\b/gi;
+    return text.match(addressRegex) || [];
+}
+```
+
+### Input Sanitization: Professional Data Cleaning
+Always clean and validate user input to prevent security issues and ensure data integrity:
+
+```javascript
+// Comprehensive input sanitization
+function sanitizeUserInput(input, options = {}) {
+    if (typeof input !== 'string') {
+        return '';
+    }
+    
+    let cleaned = input;
+    
+    // Basic cleaning
+    cleaned = cleaned.trim();                    // Remove whitespace
+    
+    // Remove potentially dangerous characters
+    if (options.removeHtml !== false) {
+        cleaned = cleaned.replace(/[<>]/g, '');  // Remove HTML brackets
+    }
+    
+    if (options.removeScripts !== false) {
+        cleaned = cleaned.replace(/javascript:/gi, ''); // Remove javascript: URLs
+        cleaned = cleaned.replace(/on\w+=/gi, '');      // Remove event handlers
+    }
+    
+    // Length limiting
+    const maxLength = options.maxLength || 1000;
+    cleaned = cleaned.substring(0, maxLength);
+    
+    // Character filtering
+    if (options.allowedChars) {
+        const allowedRegex = new RegExp(`[^${options.allowedChars}]`, 'g');
+        cleaned = cleaned.replace(allowedRegex, '');
+    }
+    
+    return cleaned;
+}
+
+// Bitcoin-specific sanitization
+function sanitizeBitcoinAddress(address) {
+    return sanitizeUserInput(address, {
+        maxLength: 62,
+        allowedChars: 'a-zA-Z0-9',
+        removeHtml: true,
+        removeScripts: true
+    });
+}
+
+function sanitizeLightningInvoice(invoice) {
+    return sanitizeUserInput(invoice, {
+        maxLength: 2000,
+        allowedChars: 'a-zA-Z0-9',
+        removeHtml: true,
+        removeScripts: true
+    }).toLowerCase();
+}
+
+function sanitizeAmount(amount) {
+    // Only allow numbers, decimal point, and basic formatting
+    const cleaned = sanitizeUserInput(amount, {
+        maxLength: 20,
+        allowedChars: '0-9.',
+        removeHtml: true,
+        removeScripts: true
+    });
+    
+    // Remove multiple decimal points
+    const parts = cleaned.split('.');
+    if (parts.length > 2) {
+        return parts[0] + '.' + parts.slice(1).join('');
+    }
+    
+    return cleaned;
+}
+```
+
+### String Validation: Comprehensive Format Checking
+Implement robust validation for all Bitcoin-related string data:
+
+```javascript
+// Comprehensive validation functions
+function validateLightningInvoice(invoice) {
+    const validation = {
+        valid: false,
+        errors: [],
+        warnings: [],
+        details: null
+    };
+    
+    // Basic checks
+    if (!invoice || typeof invoice !== 'string') {
+        validation.errors.push('Invoice is required');
+        return validation;
+    }
+    
+    const cleaned = invoice.trim().toLowerCase();
+    
+    // Length check
+    if (cleaned.length < 50) {
+        validation.errors.push('Invoice too short');
+    }
+    
+    if (cleaned.length > 2000) {
+        validation.errors.push('Invoice too long');
+    }
+    
+    // Network check
+    const isMainnet = cleaned.startsWith('lnbc');
+    const isTestnet = cleaned.startsWith('lntb');
+    
+    if (!isMainnet && !isTestnet) {
+        validation.errors.push('Invoice must start with lnbc (mainnet) or lntb (testnet)');
+    }
+    
+    // Format validation
+    const formatRegex = /^ln(bc|tb)(\d+)([munp])?1([a-z0-9]+)$/;
+    const match = cleaned.match(formatRegex);
+    
+    if (!match) {
+        validation.errors.push('Invalid invoice format');
+    } else {
+        // Extract details
+        const [, network, amount, multiplier, data] = match;
+        
+        validation.details = {
+            network: network === 'bc' ? 'mainnet' : 'testnet',
+            amount: parseInt(amount),
+            multiplier: multiplier || 'none',
+            dataLength: data.length
+        };
+        
+        // Amount validation
+        if (validation.details.amount <= 0) {
+            validation.errors.push('Invoice amount must be greater than zero');
+        }
+        
+        // Large amount warning
+        if (validation.details.amount > 100000) {
+            validation.warnings.push('Large amount - please double-check');
+        }
+    }
+    
+    validation.valid = validation.errors.length === 0;
+    return validation;
+}
+
+function validateBitcoinAmount(amount) {
+    const validation = {
+        valid: false,
+        errors: [],
+        warnings: [],
+        normalizedAmount: null
+    };
+    
+    if (!amount) {
+        validation.errors.push('Amount is required');
+        return validation;
+    }
+    
+    const cleaned = amount.toString().trim();
+    
+    // Format check
+    if (!patterns.bitcoinAmount.test(cleaned)) {
+        validation.errors.push('Invalid amount format');
+        return validation;
+    }
+    
+    const numericAmount = parseFloat(cleaned);
+    
+    // Range checks
+    if (numericAmount <= 0) {
+        validation.errors.push('Amount must be greater than zero');
+    }
+    
+    if (numericAmount > 21000000) {
+        validation.errors.push('Amount exceeds total Bitcoin supply');
+    }
+    
+    // Precision check (Bitcoin has 8 decimal places max)
+    const decimalPlaces = (cleaned.split('.')[1] || '').length;
+    if (decimalPlaces > 8) {
+        validation.errors.push('Bitcoin amounts cannot have more than 8 decimal places');
+    }
+    
+    // Dust check
+    const satoshis = Math.round(numericAmount * 100000000);
+    if (satoshis < 546) {
+        validation.warnings.push('Amount is below dust threshold (546 satoshis)');
+    }
+    
+    validation.normalizedAmount = numericAmount;
+    validation.valid = validation.errors.length === 0;
+    return validation;
+}
+```
+
 ## Step-by-Step Build
 
 ### Step 1: Project Setup
 1. Create folder `lightning-invoice-helper`
-2. Open in VS Code
+2. Open in Code Editor
 3. Create `index.html`
 
 ### Step 2: HTML Foundation

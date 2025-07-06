@@ -40,11 +40,432 @@ We're building a calculator that:
 - Provides warnings for high fees
 - Demonstrates real-world Bitcoin fee logic
 
+## Key Concepts Explained
+
+This lesson introduces decision-making logic that transforms simple calculators into intelligent Bitcoin applications:
+
+### Conditional Logic: The Brain of Your Application
+Conditional statements are how programs make decisions. They're the "if this, then that" logic that makes applications smart:
+
+```javascript
+// Basic if statement - single condition
+let feeRate = 50; // sats per vByte
+if (feeRate > 30) {
+    console.log("⚠️ High fee warning!");
+    // Only runs if condition is true
+}
+
+// if/else statement - two possibilities
+if (feeRate > 30) {
+    console.log("🔥 High priority - expensive but fast");
+} else {
+    console.log("✅ Normal fee - good value");
+}
+
+// if/else if/else chain - multiple conditions
+if (feeRate > 50) {
+    console.log("🚨 Very high fee - next block confirmation");
+} else if (feeRate > 25) {
+    console.log("⚡ Medium fee - ~30 minute confirmation");
+} else if (feeRate > 10) {
+    console.log("🐌 Low fee - ~1 hour confirmation");
+} else {
+    console.log("⏳ Very low fee - could take hours");
+}
+
+// Nested conditions
+if (feeRate > 0) {
+    if (feeRate > 100) {
+        console.log("💸 Extremely expensive!");
+        if (confirm("Are you sure you want to pay this much?")) {
+            console.log("Proceeding with high fee...");
+        }
+    } else {
+        console.log("Reasonable fee range");
+    }
+} else {
+    console.log("❌ Invalid fee rate");
+}
+
+// Complex conditions with logical operators
+let txSize = 250; // vBytes
+let urgency = "high";
+let walletBalance = 2.5; // BTC
+
+if (feeRate > 50 && urgency === "high") {
+    console.log("High fee but urgent - proceeding");
+} else if (feeRate > 20 || txSize > 1000) {
+    console.log("Either high fee or large transaction");
+} else if (!(walletBalance > 0.01)) {
+    console.log("Insufficient balance for fees");
+}
+```
+
+**Real Bitcoin conditional examples:**
+```javascript
+// Transaction validation
+function validateTransaction(amount, fee, balance) {
+    if (amount <= 0) {
+        return { valid: false, error: "Amount must be positive" };
+    }
+    
+    if (amount + fee > balance) {
+        return { valid: false, error: "Insufficient funds (including fee)" };
+    }
+    
+    if (amount > 50) { // Large transaction check
+        return { 
+            valid: true, 
+            warning: "Large transaction - double check recipient address" 
+        };
+    }
+    
+    return { valid: true };
+}
+
+// Fee recommendation logic
+function recommendFee(memPoolSize, urgency) {
+    let baseFee = 10; // sats/vByte
+    
+    // Adjust for mempool congestion
+    if (memPoolSize > 100000) {
+        baseFee *= 2; // Double fee when congested
+    } else if (memPoolSize > 50000) {
+        baseFee *= 1.5; // 50% increase for medium congestion
+    }
+    
+    // Adjust for user urgency
+    switch (urgency) {
+        case "urgent":
+            return baseFee * 2;
+        case "normal":
+            return baseFee;
+        case "patient":
+            return Math.max(baseFee * 0.5, 1); // At least 1 sat/vByte
+        default:
+            return baseFee;
+    }
+}
+
+// Address type detection
+function getAddressType(address) {
+    if (address.startsWith('1')) {
+        return 'P2PKH (Legacy)';
+    } else if (address.startsWith('3')) {
+        return 'P2SH (Script)';
+    } else if (address.startsWith('bc1q')) {
+        return 'P2WPKH (SegWit)';
+    } else if (address.startsWith('bc1p')) {
+        return 'P2TR (Taproot)';
+    } else {
+        return 'Unknown';
+    }
+}
+```
+
+### Comparison Operators: The Building Blocks of Logic
+These operators compare values and return true or false (boolean values):
+
+```javascript
+let currentPrice = 95000;
+let targetPrice = 100000;
+let fee = 25;
+let minFee = 10;
+let maxFee = 100;
+
+// Numeric comparisons
+console.log(currentPrice > targetPrice);    // false - 95000 > 100000
+console.log(currentPrice < targetPrice);    // true  - 95000 < 100000
+console.log(fee >= minFee);                 // true  - 25 >= 10
+console.log(fee <= maxFee);                 // true  - 25 <= 100
+
+// Equality comparisons (IMPORTANT: use === not ==)
+console.log(fee === 25);                    // true  - exact match
+console.log(fee !== 30);                    // true  - not equal
+console.log(fee == "25");                   // true  - but avoid this!
+console.log(fee === "25");                  // false - number vs string
+
+// String comparisons
+let address1 = "bc1q742d6ccq93c9cxh6f5nj...";
+let address2 = "bc1q742d6ccq93c9cxh6f5nj...";
+console.log(address1 === address2);         // true - exact string match
+
+// Logical operators for combining conditions
+let isHighFee = fee > 50;
+let isUrgent = true;
+let hasBalance = true;
+
+console.log(isHighFee && isUrgent);         // AND - both must be true
+console.log(isHighFee || isUrgent);         // OR - either can be true
+console.log(!isHighFee);                    // NOT - opposite of isHighFee
+
+// Complex logical expressions
+let shouldProceed = hasBalance && (isUrgent || !isHighFee);
+let needsWarning = isHighFee && !isUrgent;
+
+// Truthiness and falsiness (advanced but important)
+if (0) console.log("Won't run");            // 0 is falsy
+if ("") console.log("Won't run");           // empty string is falsy
+if (null) console.log("Won't run");         // null is falsy
+if (undefined) console.log("Won't run");    // undefined is falsy
+if (false) console.log("Won't run");        // false is falsy
+
+if (1) console.log("Will run");             // non-zero numbers are truthy
+if ("text") console.log("Will run");        // non-empty strings are truthy
+if ([]) console.log("Will run");            // arrays are truthy (even empty)
+if ({}) console.log("Will run");            // objects are truthy (even empty)
+```
+
+### User Input Validation: Professional Data Handling
+Real Bitcoin applications must validate every piece of user input to prevent errors and security issues:
+
+```javascript
+// Comprehensive amount validation
+function validateBitcoinAmount(input) {
+    // Step 1: Check if input exists
+    if (!input || input.trim() === '') {
+        return { valid: false, error: "Amount is required" };
+    }
+    
+    // Step 2: Convert to number
+    const amount = parseFloat(input);
+    
+    // Step 3: Check if conversion worked
+    if (isNaN(amount)) {
+        return { valid: false, error: "Please enter a valid number" };
+    }
+    
+    // Step 4: Check positive value
+    if (amount <= 0) {
+        return { valid: false, error: "Amount must be greater than zero" };
+    }
+    
+    // Step 5: Check maximum supply
+    if (amount > 21000000) {
+        return { valid: false, error: "Amount exceeds total Bitcoin supply" };
+    }
+    
+    // Step 6: Check decimal precision (Bitcoin has 8 decimal places)
+    const decimalPlaces = (input.split('.')[1] || '').length;
+    if (decimalPlaces > 8) {
+        return { valid: false, error: "Bitcoin amounts cannot have more than 8 decimal places" };
+    }
+    
+    // Step 7: Check dust amount (very small amounts)
+    const satoshis = amount * 100000000;
+    if (satoshis < 546) { // 546 sats is typical dust limit
+        return { 
+            valid: false, 
+            error: "Amount too small - minimum is 546 satoshis (0.00000546 BTC)" 
+        };
+    }
+    
+    return { valid: true, amount: amount };
+}
+
+// Address validation
+function validateBitcoinAddress(address) {
+    if (!address || typeof address !== 'string') {
+        return { valid: false, error: "Address is required" };
+    }
+    
+    address = address.trim();
+    
+    // Check length
+    if (address.length < 26 || address.length > 62) {
+        return { valid: false, error: "Invalid address length" };
+    }
+    
+    // Check format
+    const validFormats = [
+        /^1[a-km-z1-9]{25,34}$/i,    // P2PKH (Legacy)
+        /^3[a-km-z1-9]{25,34}$/i,    // P2SH (Script)
+        /^bc1q[a-z0-9]{39}$/i,       // P2WPKH (SegWit)
+        /^bc1p[a-z0-9]{59}$/i        // P2TR (Taproot)
+    ];
+    
+    const isValidFormat = validFormats.some(regex => regex.test(address));
+    
+    if (!isValidFormat) {
+        return { valid: false, error: "Invalid Bitcoin address format" };
+    }
+    
+    return { valid: true, address: address };
+}
+
+// Fee rate validation
+function validateFeeRate(input, txSize = 250) {
+    const validation = validateBitcoinAmount(input);
+    if (!validation.valid) {
+        return validation;
+    }
+    
+    const feeRate = validation.amount;
+    
+    // Check reasonable limits
+    if (feeRate < 1) {
+        return { valid: false, error: "Fee rate too low - minimum 1 sat/vByte" };
+    }
+    
+    if (feeRate > 1000) {
+        return { 
+            valid: false, 
+            error: "Fee rate extremely high - please double-check" 
+        };
+    }
+    
+    // Calculate total fee
+    const totalFee = feeRate * txSize;
+    const totalFeeBTC = totalFee / 100000000;
+    
+    // Warn about high fees
+    if (totalFeeBTC > 0.001) { // More than 0.001 BTC fee
+        return {
+            valid: true,
+            feeRate: feeRate,
+            warning: `High fee: ${totalFeeBTC.toFixed(8)} BTC ($${(totalFeeBTC * 95000).toFixed(2)})`
+        };
+    }
+    
+    return { valid: true, feeRate: feeRate };
+}
+
+// Comprehensive form validation
+function validateTransactionForm(formData) {
+    const errors = [];
+    const warnings = [];
+    
+    // Validate recipient
+    const recipientValidation = validateBitcoinAddress(formData.recipient);
+    if (!recipientValidation.valid) {
+        errors.push(`Recipient: ${recipientValidation.error}`);
+    }
+    
+    // Validate amount
+    const amountValidation = validateBitcoinAmount(formData.amount);
+    if (!amountValidation.valid) {
+        errors.push(`Amount: ${amountValidation.error}`);
+    }
+    
+    // Validate fee
+    const feeValidation = validateFeeRate(formData.feeRate);
+    if (!feeValidation.valid) {
+        errors.push(`Fee: ${feeValidation.error}`);
+    } else if (feeValidation.warning) {
+        warnings.push(feeValidation.warning);
+    }
+    
+    // Cross-validation (check relationships between fields)
+    if (amountValidation.valid && feeValidation.valid) {
+        const totalNeeded = amountValidation.amount + (feeValidation.feeRate * 250 / 100000000);
+        const availableBalance = parseFloat(formData.balance || 0);
+        
+        if (totalNeeded > availableBalance) {
+            errors.push(`Insufficient funds: Need ${totalNeeded.toFixed(8)} BTC, have ${availableBalance.toFixed(8)} BTC`);
+        }
+    }
+    
+    return {
+        valid: errors.length === 0,
+        errors: errors,
+        warnings: warnings
+    };
+}
+```
+
+### Ternary Operator: Concise Conditional Logic
+The ternary operator is a shorthand for simple if/else statements:
+
+```javascript
+// Basic ternary syntax: condition ? valueIfTrue : valueIfFalse
+let fee = 45;
+let feeStatus = fee > 30 ? "High" : "Normal";
+console.log(feeStatus); // "High"
+
+// Equivalent if/else statement
+let feeStatusLong;
+if (fee > 30) {
+    feeStatusLong = "High";
+} else {
+    feeStatusLong = "Normal";
+}
+
+// Multiple ternary operators (chaining)
+let priority = fee > 50 ? "Urgent" : fee > 25 ? "Medium" : "Low";
+
+// Using ternary in template literals
+let message = `Fee: ${fee} sats/vByte (${fee > 30 ? 'Expensive' : 'Reasonable'})`;
+
+// Ternary for function calls
+let displayColor = fee > 50 ? setRedColor() : setGreenColor();
+
+// Ternary for object properties
+let transactionDetails = {
+    amount: 1.5,
+    fee: fee,
+    status: fee > 100 ? 'warning' : 'normal',
+    canProceed: fee <= 1000,
+    displayClass: fee > 50 ? 'fee-high' : fee > 20 ? 'fee-medium' : 'fee-low'
+};
+
+// Real Bitcoin examples with ternary
+function formatTransactionStatus(confirmations) {
+    return confirmations >= 6 ? 'Confirmed ✅' : 
+           confirmations >= 1 ? `${confirmations} confirmations ⏳` : 
+           'Unconfirmed ⏸️';
+}
+
+function getNetworkIcon(network) {
+    return network === 'mainnet' ? '🟠' : 
+           network === 'testnet' ? '🟡' : 
+           network === 'regtest' ? '🔵' : '❓';
+}
+
+function calculateRecommendedAction(price, targetBuyPrice, targetSellPrice) {
+    return price < targetBuyPrice ? 'BUY 📈' : 
+           price > targetSellPrice ? 'SELL 📉' : 
+           'HOLD 💎';
+}
+
+// Complex ternary with Bitcoin logic
+function getTransactionPriority(feeRate, mempoolSize, userUrgency) {
+    return userUrgency === 'urgent' ? 
+        (feeRate > 50 ? 'Next Block' : 'High Priority') :
+        mempoolSize > 100000 ? 
+            (feeRate > 20 ? 'Medium Priority' : 'Low Priority') :
+            (feeRate > 10 ? 'Normal' : 'Economy');
+}
+```
+
+**Why conditional logic is essential for Bitcoin development:**
+- **Safety**: Validates user input before processing Bitcoin transactions
+- **User Experience**: Provides helpful feedback and warnings
+- **Business Logic**: Implements fee estimation, priority levels, and transaction rules
+- **Error Handling**: Gracefully handles edge cases and invalid data
+- **Smart Defaults**: Automatically adjusts behavior based on network conditions
+
+**Common Bitcoin conditional patterns:**
+```javascript
+// Network-aware logic
+const isMainnet = network === 'bitcoin';
+const addressPrefix = isMainnet ? 'bc1' : 'tb1';
+const explorerURL = isMainnet ? 'blockstream.info' : 'blockstream.info/testnet';
+
+// Confirmation-based logic
+const isFullyConfirmed = confirmations >= 6;
+const isSafeToSpend = isFullyConfirmed || (amount < 0.01 && confirmations >= 1);
+
+// Fee-based recommendations
+const isEconomical = feeRate < 20;
+const isFast = feeRate > 50;
+const recommendation = isEconomical ? 'Good value' : isFast ? 'Fast confirmation' : 'Balanced choice';
+```
+
 ## Step-by-Step Build
 
 ### Step 1: Project Setup
 1. Create folder `bitcoin-fee-calculator`
-2. Open in VS Code
+2. Open in Code Editor
 3. Create `index.html`
 
 ### Step 2: HTML Foundation

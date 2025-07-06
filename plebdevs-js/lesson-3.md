@@ -40,11 +40,322 @@ We're building a tracker that:
 - Uses realistic wallet types (Hardware, Mobile, Lightning)
 - Demonstrates professional data handling
 
+## Key Concepts Explained
+
+This lesson introduces powerful data structures that make complex applications possible:
+
+### Objects: Your Data Organization System
+Objects are containers that group related information together. Think of them as digital filing cabinets where each drawer has a label:
+
+```javascript
+// Basic object structure
+const wallet = {
+    name: "Hardware Wallet",        // Property: value
+    balance: 2.5,                   // Number property
+    type: "cold storage",           // String property
+    isActive: true,                 // Boolean property
+    transactions: [],               // Array property
+    lastUsed: new Date()           // Date object property
+};
+
+// Accessing object properties (two ways)
+console.log(wallet.name);          // Dot notation: "Hardware Wallet"
+console.log(wallet["balance"]);    // Bracket notation: 2.5
+
+// Adding new properties
+wallet.address = "bc1q742d6ccq93c9cxh6f5nj...";
+wallet["publicKey"] = "0279BE667EF9DCBBAC55A06295CE870B07029...";
+
+// Modifying existing properties
+wallet.balance = 3.0;
+wallet.lastUsed = new Date();
+
+// Complex nested objects
+const bitcoinWallet = {
+    owner: "Satoshi",
+    created: "2009-01-03",
+    balance: {
+        btc: 2.5,
+        sats: 250000000,
+        usd: 237500
+    },
+    addresses: {
+        receiving: "bc1q742d6ccq93c9cxh6f5nj...",
+        change: "bc1q8c6fshw2dlwun7ekn9qwf37cu2rn755upcp6el"
+    },
+    security: {
+        encrypted: true,
+        backupExists: true,
+        lastBackup: "2025-01-15"
+    },
+    // Methods (functions inside objects)
+    updateBalance: function(newAmount) {
+        this.balance.btc = newAmount;
+        this.balance.sats = newAmount * 100000000;
+        this.balance.usd = newAmount * 95000; // Assuming $95k price
+    },
+    getFormattedBalance: function() {
+        return `${this.balance.btc.toFixed(8)} BTC (${this.balance.sats.toLocaleString()} sats)`;
+    }
+};
+
+// Using object methods
+bitcoinWallet.updateBalance(3.0);
+console.log(bitcoinWallet.getFormattedBalance()); // "3.00000000 BTC (300,000,000 sats)"
+```
+
+**Real Bitcoin object patterns:**
+```javascript
+// Transaction object
+const transaction = {
+    txid: "a1b2c3d4e5f6789012345678901234567890123456789012345678901234567890",
+    amount: 0.5,
+    fee: 0.00025,
+    confirmations: 6,
+    timestamp: 1705123456789,
+    inputs: [
+        { address: "bc1q...", amount: 0.75 }
+    ],
+    outputs: [
+        { address: "bc1q...", amount: 0.5 },
+        { address: "bc1q...", amount: 0.24975 } // Change
+    ],
+    isConfirmed: function() {
+        return this.confirmations >= 6;
+    }
+};
+
+// Portfolio object
+const portfolio = {
+    totalBTC: 0,
+    totalUSD: 0,
+    wallets: [],
+    
+    addWallet: function(wallet) {
+        this.wallets.push(wallet);
+        this.recalculateTotal();
+    },
+    
+    recalculateTotal: function() {
+        this.totalBTC = this.wallets.reduce((sum, wallet) => sum + wallet.balance, 0);
+        this.totalUSD = this.totalBTC * 95000; // Current price
+    }
+};
+```
+
+### Arrays: Ordered Lists of Data
+Arrays store multiple items in sequence, like a numbered list:
+
+```javascript
+// Basic array creation
+const prices = [95000, 96000, 94500, 97000];
+const currencies = ["USD", "EUR", "GBP", "JPY"];
+const mixed = [95000, "Bitcoin", true, null];
+
+// Array of objects (very common in Bitcoin apps)
+const wallets = [
+    { 
+        name: "Hardware Wallet", 
+        balance: 2.5, 
+        type: "hardware",
+        brand: "Ledger"
+    },
+    { 
+        name: "Mobile Wallet", 
+        balance: 0.15, 
+        type: "software",
+        brand: "BlueWallet"
+    },
+    { 
+        name: "Lightning Wallet", 
+        balance: 0.03, 
+        type: "lightning",
+        brand: "Phoenix"
+    }
+];
+
+// Accessing array items (zero-indexed)
+console.log(prices[0]);         // 95000 (first item)
+console.log(prices[3]);         // 97000 (fourth item)
+console.log(wallets[1].name);   // "Mobile Wallet"
+
+// Array properties
+console.log(prices.length);     // 4 (number of items)
+console.log(wallets.length);    // 3
+
+// Complex nested arrays
+const priceHistory = [
+    { date: "2025-01-01", prices: [94000, 95000, 93500, 94800] },
+    { date: "2025-01-02", prices: [94800, 96000, 94200, 95500] },
+    { date: "2025-01-03", prices: [95500, 97000, 95000, 96200] }
+];
+
+// Accessing nested data
+console.log(priceHistory[0].prices[1]); // 95000
+```
+
+### Loops: Processing Every Item
+Loops let you perform operations on each item in an array:
+
+```javascript
+const wallets = [
+    { name: "Hardware", balance: 2.5, type: "cold" },
+    { name: "Mobile", balance: 0.3, type: "hot" },
+    { name: "Lightning", balance: 0.05, type: "hot" }
+];
+
+// for...of loop (modern, clean, recommended)
+for (let wallet of wallets) {
+    console.log(`${wallet.name}: ${wallet.balance} BTC`);
+    
+    // You can use the full object
+    if (wallet.type === "cold") {
+        console.log("🔒 Cold storage wallet");
+    }
+}
+
+// Traditional for loop (when you need the index)
+for (let i = 0; i < wallets.length; i++) {
+    console.log(`Wallet ${i + 1}: ${wallets[i].name}`);
+    
+    // Modify the original array
+    wallets[i].index = i;
+}
+
+// while loop (for conditional iteration)
+let totalBalance = 0;
+let i = 0;
+while (i < wallets.length && totalBalance < 1.0) {
+    totalBalance += wallets[i].balance;
+    i++;
+}
+
+// Building HTML with loops
+function displayWallets(wallets) {
+    let html = "<ul>";
+    
+    for (let wallet of wallets) {
+        const satoshis = (wallet.balance * 100000000).toLocaleString();
+        html += `
+            <li>
+                <strong>${wallet.name}</strong><br>
+                Balance: ${wallet.balance} BTC (${satoshis} sats)<br>
+                Type: ${wallet.type}
+                ${wallet.type === 'cold' ? '🔒' : '📱'}
+            </li>
+        `;
+    }
+    
+    html += "</ul>";
+    return html;
+}
+```
+
+### Array Methods: Powerful Built-in Tools
+Arrays come with many helpful methods for data manipulation:
+
+```javascript
+const wallets = [
+    { name: "Hardware", balance: 2.5, type: "cold" },
+    { name: "Mobile", balance: 0.3, type: "hot" },
+    { name: "Lightning", balance: 0.05, type: "hot" },
+    { name: "Paper", balance: 1.2, type: "cold" }
+];
+
+// Adding/removing items
+wallets.push({ name: "New Wallet", balance: 0.1, type: "hot" });     // Add to end
+wallets.unshift({ name: "First", balance: 0.01, type: "hot" });      // Add to beginning
+let removed = wallets.pop();                                          // Remove from end
+let first = wallets.shift();                                         // Remove from beginning
+
+// Finding items
+let hardwareWallet = wallets.find(wallet => wallet.name === "Hardware");
+let hotWallets = wallets.filter(wallet => wallet.type === "hot");
+let walletIndex = wallets.findIndex(wallet => wallet.balance > 1.0);
+
+// Transforming data
+let balances = wallets.map(wallet => wallet.balance);
+let formattedWallets = wallets.map(wallet => ({
+    ...wallet,
+    formattedBalance: `${wallet.balance.toFixed(8)} BTC`,
+    satoshis: wallet.balance * 100000000
+}));
+
+// Calculations
+let totalBalance = wallets.reduce((sum, wallet) => sum + wallet.balance, 0);
+let avgBalance = totalBalance / wallets.length;
+let hasLargeBalance = wallets.some(wallet => wallet.balance > 1.0);
+let allPositive = wallets.every(wallet => wallet.balance > 0);
+
+// Sorting
+let sortedByBalance = [...wallets].sort((a, b) => b.balance - a.balance);
+let sortedByName = [...wallets].sort((a, b) => a.name.localeCompare(b.name));
+
+// Grouping by type
+let walletsByType = wallets.reduce((groups, wallet) => {
+    const type = wallet.type;
+    if (!groups[type]) {
+        groups[type] = [];
+    }
+    groups[type].push(wallet);
+    return groups;
+}, {});
+
+// Real Bitcoin portfolio calculations
+function calculatePortfolioStats(wallets, currentPrice = 95000) {
+    const stats = {
+        totalBTC: wallets.reduce((sum, w) => sum + w.balance, 0),
+        totalUSD: 0,
+        largestWallet: null,
+        smallestWallet: null,
+        coldStorageTotal: 0,
+        hotWalletTotal: 0,
+        walletCount: wallets.length
+    };
+    
+    stats.totalUSD = stats.totalBTC * currentPrice;
+    stats.largestWallet = wallets.reduce((max, w) => w.balance > max.balance ? w : max);
+    stats.smallestWallet = wallets.reduce((min, w) => w.balance < min.balance ? w : min);
+    stats.coldStorageTotal = wallets
+        .filter(w => w.type === 'cold')
+        .reduce((sum, w) => sum + w.balance, 0);
+    stats.hotWalletTotal = wallets
+        .filter(w => w.type === 'hot')
+        .reduce((sum, w) => sum + w.balance, 0);
+    
+    return stats;
+}
+```
+
+**Why these concepts are crucial for Bitcoin development:**
+- **Objects** model real-world Bitcoin entities (wallets, transactions, blocks)
+- **Arrays** handle lists of Bitcoin data (transaction history, multiple wallets, price data)
+- **Loops** process Bitcoin data efficiently (calculating totals, generating displays)
+- **Array methods** provide powerful tools for Bitcoin analytics and portfolio management
+
+**Common Bitcoin development patterns:**
+```javascript
+// Portfolio management
+const portfolio = {
+    wallets: [],
+    addWallet(wallet) { this.wallets.push(wallet); },
+    getTotalBalance() { return this.wallets.reduce((sum, w) => sum + w.balance, 0); },
+    getWalletsByType(type) { return this.wallets.filter(w => w.type === type); }
+};
+
+// Transaction processing
+const transactions = [...];
+const confirmedTxs = transactions.filter(tx => tx.confirmations >= 6);
+const totalReceived = transactions
+    .filter(tx => tx.type === 'receive')
+    .reduce((sum, tx) => sum + tx.amount, 0);
+```
+
 ## Step-by-Step Build
 
 ### Step 1: Project Setup
 1. Create folder `bitcoin-wallet-tracker`
-2. Open in VS Code
+2. Open in Code Editor
 3. Create `index.html`
 
 ### Step 2: HTML Structure

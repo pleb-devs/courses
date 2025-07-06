@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head><title>Simple Form Handler</title></head>
+<body>
+    <form id="transactionForm">
+        <input name="recipient" placeholder="Enter recipient address" required>
+        <input name="amount" type="number" placeholder="Enter amount" step="0.01" required>
+        <button type="submit">Send Transaction</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('transactionForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const recipient = formData.get('recipient');
+            const amount = parseFloat(formData.get('amount'));
+            
+            if (recipient.length > 5 && amount > 0) {
+                document.getElementById('result').innerHTML = `✅ Transaction: ${amount} to ${recipient}`;
+            } else {
+                document.getElementById('result').innerHTML = '❌ Invalid recipient or amount';
+            }
+        });
+    </script>
+</body>
+</html> 
