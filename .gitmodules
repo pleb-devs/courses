@@ -1,3 +1,6 @@
 [submodule "plebdevs-course-1"]
 	path = plebdevs-course-1
 	url = https://github.com/pleb-devs/plebdevs-course-1.git
+[submodule "plebdevs-course-2"]
+	path = plebdevs-course-2
+	url = https://github.com/pleb-devs/plebdevs-course-2.git
