@@ -1,8 +1,7 @@
-[![Watch the lesson video](https://img.shields.io/badge/Watch-Lesson%20Video-blue)](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/frontend-lesson-1.mp4)
+[![Watch the lesson video](https://img.shields.io/badge/Watch-Lesson%20Video-blue)](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/course-1-lesson-1.mp4)
 
 *You can access the lesson video directly here:*
-- [MP4 Format](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/frontend-lesson-1.mp4)
-- [WebM Format](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/frontend-lesson-1.webm)
+- [MP4 Format](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/course-1-lesson-1.mp4)
 
 # HTML & Bitcoin: Building Your First Bitcoin Blog
 

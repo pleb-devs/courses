@@ -1,10 +1,9 @@
 # Building Your Lightning Wallet with React
 
-[![Watch the lesson video](https://img.shields.io/badge/Watch-Lesson%20Video-blue)](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/frontend-lesson-6.mp4)
+[![Watch the lesson video](https://img.shields.io/badge/Watch-Lesson%20Video-blue)](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/course-1-lesson-6.mp4)
 
 *You can access the lesson video directly here:*
-- [MP4 Format](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/frontend-lesson-6.mp4)
-- [WebM Format](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/frontend-lesson-6.webm)
+- [MP4 Format](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/course-1-lesson-6.mp4)
 
 ## Lesson Overview
 Welcome to the final lesson of the PlebDevs Frontend Course! This is where we bring everything together and build a fully functional Lightning wallet using React. You'll transform from someone who understands individual web technologies into a developer who can build modern, component-based applications that scale.
