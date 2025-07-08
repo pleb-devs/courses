@@ -1324,7 +1324,6 @@ These patterns power modern Bitcoin applications:
 - **Wallet Applications**: Saving transaction history and preferences
 - **Trading Interfaces**: Storing watchlists and custom settings
 - **Portfolio Trackers**: Maintaining investment records
-- **DeFi Dashboards**: Tracking yield farming positions
 - **Lightning Apps**: Remembering channel states and routing preferences
 - **Mining Tools**: Storing rig configurations and historical data
 

@@ -1556,7 +1556,6 @@ These skills power professional Bitcoin applications:
 - **Mining Dashboards**: Hashrate monitoring, profitability charts
 - **Portfolio Analytics**: Performance tracking, allocation visualization
 - **Network Statistics**: Transaction volume, fee estimation charts
-- **DeFi Protocols**: Yield curves, liquidity pool analytics
 - **Block Explorers**: Transaction history, address balance charts
 
 ## Challenge Yourself

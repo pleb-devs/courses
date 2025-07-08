@@ -296,8 +296,15 @@ function validateBitcoinInput(event) {
 
 **HTML form with real-time input validation**
 ```html
-<input type="text" id="amount" oninput={validateBitcoinInput(event)}>
+<input type="text" id="amount">
 <div id="input-error"></div>
+
+<script>
+// Set up input validation when page loads
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("amount").addEventListener("input", validateBitcoinInput);
+});
+</script>
 ```
 
 ### Type Conversion: Handling User Input Safely
@@ -542,7 +549,7 @@ function isValidBitcoinAmount(amount) {
             <input type="number" id="btc-input" placeholder="0.00000001" step="0.00000001">
         </div>
         
-        <button onclick="convertToSats()">Convert to Satoshis</button>
+        <button id="convert-button">Convert to Satoshis</button>
         
         <div id="result" class="result">
             Enter an amount above and click convert!
@@ -557,7 +564,7 @@ function isValidBitcoinAmount(amount) {
 ```
 
 ### Step 3: Understanding Functions
-Functions are like recipes - they take ingredients (inputs) and produce a dish (output):
+We will create functions to capture and reuse blocks of code and important logic that is used in multiple places.
 
 ```javascript
 // Function declaration - this is how we create reusable code
@@ -565,7 +572,7 @@ function convertToSats() {
     console.log("Convert function called!");
 }
 
-// This function will run when the button is clicked
+// This function will be set up to run when the button is clicked
 ```
 
 ### Step 4: Getting User Input
@@ -627,7 +634,56 @@ function convertToSats() {
 }
 ```
 
-### Step 7: Enhanced Version with Extra Features
+### Step 7: Setting Up Event Listeners (Best Practice)
+Now let's connect our function to the button properly using event listeners instead of inline handlers:
+
+```javascript
+// Wait for the page to load, then set up event listeners
+document.addEventListener("DOMContentLoaded", function() {
+    // Connect the button to our function
+    document.getElementById("convert-button").addEventListener("click", convertToSats);
+    
+    // Allow Enter key to trigger conversion
+    document.getElementById("btc-input").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            convertToSats();
+        }
+    });
+});
+
+// Our complete conversion function
+function convertToSats() {
+    // Get and validate input
+    const btcInput = document.getElementById("btc-input");
+    const btcAmount = parseFloat(btcInput.value);
+    
+    if (isNaN(btcAmount) || btcAmount <= 0) {
+        document.getElementById("result").innerHTML = 
+            "⚠️ Please enter a valid BTC amount";
+        return;
+    }
+    
+    // The core conversion: 1 BTC = 100,000,000 satoshis
+    const satoshis = btcAmount * 100000000;
+    
+    // Display the result
+    const resultElement = document.getElementById("result");
+    resultElement.innerHTML = `
+        <div>
+            <div class="satoshi-count">${satoshis.toLocaleString()} sats</div>
+            <div>${btcAmount} BTC = ${satoshis.toLocaleString()} satoshis</div>
+        </div>
+    `;
+}
+```
+
+**Why this approach is better:**
+- **Separation of concerns**: HTML handles structure, JavaScript handles behavior
+- **Maintainability**: Easier to manage all event listeners in one place
+- **Flexibility**: Can easily add/remove event listeners dynamically
+- **Best practices**: Industry standard approach for modern web development
+
+### Step 8: Enhanced Version with Extra Features
 Here's the complete, enhanced calculator:
 
 ```html
@@ -738,13 +794,13 @@ Here's the complete, enhanced calculator:
         </div>
         
         <div class="quick-amounts">
-            <button class="quick-btn" onclick="setAmount(0.00000001)">1 Satoshi</button>
-            <button class="quick-btn" onclick="setAmount(0.00001)">1000 Sats</button>
-            <button class="quick-btn" onclick="setAmount(0.001)">100K Sats</button>
-            <button class="quick-btn" onclick="setAmount(1)">1 BTC</button>
+            <button class="quick-btn" data-amount="0.00000001">1 Satoshi</button>
+            <button class="quick-btn" data-amount="0.00001">1000 Sats</button>
+            <button class="quick-btn" data-amount="0.001">100K Sats</button>
+            <button class="quick-btn" data-amount="1">1 BTC</button>
         </div>
         
-        <button onclick="convertToSats()">Convert to Satoshis</button>
+        <button id="convert-button">Convert to Satoshis</button>
         
         <div id="result" class="result">
             Enter an amount above and click convert!
@@ -807,11 +863,25 @@ Here's the complete, enhanced calculator:
             convertToSats(); // Automatically convert
         }
         
-        // Allow Enter key to trigger conversion
-        document.getElementById("btc-input").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                convertToSats();
-            }
+        // Set up event listeners when page loads
+        document.addEventListener("DOMContentLoaded", function() {
+            // Main convert button
+            document.getElementById("convert-button").addEventListener("click", convertToSats);
+            
+            // Quick amount buttons
+            document.querySelectorAll(".quick-btn").forEach(button => {
+                button.addEventListener("click", function() {
+                    const amount = parseFloat(this.dataset.amount);
+                    setAmount(amount);
+                });
+            });
+            
+            // Allow Enter key to trigger conversion
+            document.getElementById("btc-input").addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    convertToSats();
+                }
+            });
         });
     </script>
 </body>
@@ -827,9 +897,9 @@ Here's the complete, enhanced calculator:
 - **Organization**: Functions make code cleaner and easier to maintain
 
 ### Event Handlers
-- **onclick**: Connects buttons to functions
-- **addEventListener**: More advanced event handling
-- **User Interaction**: Making web pages respond to user actions
+- **addEventListener**: Modern way to connect user actions to functions
+- **Event listeners**: Proper separation of HTML structure and JavaScript behavior
+- **User Interaction**: Making web pages respond to user actions professionally
 
 ### Number Methods & Conversion
 - **parseFloat()**: Converts strings to decimal numbers
@@ -861,7 +931,9 @@ Here's the complete, enhanced calculator:
 - Remember: 1 BTC = exactly 100,000,000 satoshis
 
 ### Button Not Working
-- Verify the `onclick` attribute matches your function name exactly
+- Verify your event listeners are set up correctly with `addEventListener`
+- Check that button IDs match what you're selecting in JavaScript
+- Make sure `DOMContentLoaded` event fires before setting up listeners
 - Check browser console (F12) for JavaScript errors
 
 ## Real-World Applications
@@ -870,7 +942,6 @@ This calculator demonstrates patterns you'll use in:
 - **Lightning Network**: Converting between base units and millisatoshis
 - **Payment Processors**: Handling different denomination displays
 - **Wallet Applications**: Showing amounts in user-preferred units
-- **DeFi Applications**: Converting between different token amounts
 
 ## Next Steps
 
@@ -889,7 +960,7 @@ Fantastic work! You've mastered functions and user interaction. In Lesson 3, we'
 
 ## Share Your Success!
 
-🎉 **You built a professional Bitcoin calculator!** 
+🎉 **You built your very own Bitcoin calculator!** 
 
 This is exactly the kind of tool Bitcoin developers create every day. You're building real skills that matter in the Bitcoin ecosystem.
 

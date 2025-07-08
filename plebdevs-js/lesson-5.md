@@ -1175,7 +1175,6 @@ These patterns are essential in Bitcoin development:
 - **Wallet Applications**: Transaction status monitoring
 - **Lightning Network**: Channel state updates
 - **Mining Dashboards**: Hashrate and difficulty tracking
-- **DeFi Protocols**: Yield farming and liquidity updates
 
 ## Challenge Yourself
 

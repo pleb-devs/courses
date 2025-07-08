@@ -1162,7 +1162,6 @@ These patterns are everywhere in Bitcoin development:
 - **Wallet Applications**: Validating addresses and amounts
 - **Exchange Interfaces**: Setting trading limits and warnings
 - **Payment Processors**: Implementing fraud detection
-- **DeFi Protocols**: Managing risk parameters
 - **Lightning Apps**: Route selection and channel management
 
 ## Challenge Yourself

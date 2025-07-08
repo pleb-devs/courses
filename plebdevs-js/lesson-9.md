@@ -1235,7 +1235,6 @@ These patterns are essential for Bitcoin development:
 - **Block Explorers**: Live blockchain data, transaction status
 - **Lightning Apps**: Channel state monitoring, route discovery
 - **Mining Dashboards**: Pool statistics, profitability calculations
-- **DeFi Protocols**: Yield updates, liquidity monitoring
 
 ## Challenge Yourself
 
