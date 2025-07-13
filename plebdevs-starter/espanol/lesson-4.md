@@ -1,3 +1,8 @@
+[![Mira el video de introducción a HTML](https://img.shields.io/badge/Watch-HTML%20Introduction%20Video-blue)](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/starter-course-espanol/lesson-3.mp4)
+
+*Puedes acceder al video de introducción a HTML directamente aquí:*
+- [Formato MP4](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/starter-course-espanol/lesson-3.mp4)
+
 # HTML: Construyendo la Estructura de la Web
 
 ## Introducción

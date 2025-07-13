@@ -1,3 +1,8 @@
+[![Mira el video de introducción a CSS](https://img.shields.io/badge/Watch-CSS%20Introduction%20Video-blue)](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/starter-course-espanol/lesson-4.mp4)
+
+*Puedes acceder al video de introducción a CSS directamente aquí:*
+- [Formato MP4](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/starter-course-espanol/lesson-4.mp4)
+
 # CSS: Dando Estilo a tu Primera Página Web
 
 ## Introducción

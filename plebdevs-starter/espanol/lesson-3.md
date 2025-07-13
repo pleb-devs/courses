@@ -1,3 +1,8 @@
+[![Mira el video de configuración de Git y GitHub](https://img.shields.io/badge/Watch-Git%20and%20GitHub%20Setup%20Video-blue)](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/starter-course-espanol/lesson-2.mp4)
+
+*Puedes acceder al video de configuración de Git y GitHub directamente aquí:*
+- [Formato MP4](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/starter-course-espanol/lesson-2.mp4)
+
 # Configurar Git y GitHub: La Base de un Desarrollador
 
 ## Introducción

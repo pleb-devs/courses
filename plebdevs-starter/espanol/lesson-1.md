@@ -1,3 +1,8 @@
+[![Mira el video de introducción al curso](https://img.shields.io/badge/Watch-Course%20Intro%20Video-blue)](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/starter-course-espanol/lesson-0.mp4)
+
+*Puedes acceder al video de introducción al curso directamente aquí:*
+- [Formato MP4](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/starter-course-espanol/lesson-0.mp4)
+
 # Bienvenido al Curso de Inicio de PlebDevs
 
 ## Misión del Curso

@@ -1,3 +1,8 @@
+[![Mira el video de configuración del editor de código](https://img.shields.io/badge/Watch-Editor%20Setup%20Video-blue)](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/starter-course-espanol/lesson-1.mp4)
+
+*Puedes acceder al video de configuración del editor de código directamente aquí:*
+- [Formato MP4](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/starter-course-espanol/lesson-1.mp4)
+
 # Configurar tu Editor de Código
 
 ## Introducción

@@ -1,3 +1,8 @@
+[![Mira el video de introducción a JavaScript](https://img.shields.io/badge/Watch-JavaScript%20Introduction%20Video-blue)](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/starter-course-espanol/lesson-5.mp4)
+
+*Puedes acceder al video de introducción a JavaScript directamente aquí:*
+- [Formato MP4](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/starter-course-espanol/lesson-5.mp4)
+
 # JavaScript: Construyendo tu Primera Aplicación Web Interactiva
 
 ## Introducción
