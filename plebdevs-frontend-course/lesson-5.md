@@ -3,6 +3,10 @@
 *You can access the lesson video directly here:*
 - [MP4 Format](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/course-1-lesson-5.mp4)
 
+## Additional Resources
+- **Slides:** [Learn React Presentation](https://docs.google.com/presentation/d/1CXdnCi_I0R-lPi1XKnvDN0QL3atSlurWApvfEXf1n2M/edit?usp=sharing)
+- **Repository:** [Pleb Wallet React Code Examples](https://github.com/AustinKelsay/pleb-wallet-react)
+
 # Learn React: Building the Pleb Wallet Frontend
 
 ## Lesson Overview

@@ -3,6 +3,10 @@
 *You can access the lesson video directly here:*
 - [MP4 Format](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/course-1-lesson-3.mp4)
 
+## Additional Resources
+- **Slides:** [Learn JavaScript and Bitcoin Presentation](https://docs.google.com/presentation/d/1WlWyiZAkUHnu0h8noCT9hjsShOdp33-lh2xfoHytTcc/edit?usp=sharing)
+- **Repository:** [Learn JavaScript Code Examples](https://github.com/supertestnet/learn-javascript)
+
 # Learn JavaScript: Building Your First Bitcoin Wallet
 
 ## Lesson Overview

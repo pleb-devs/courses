@@ -3,6 +3,10 @@
 *You can access the lesson video directly here:*
 - [MP4 Format](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/course-1-lesson-1.mp4)
 
+## Additional Resources
+- **Slides:** [Learn HTML Presentation](https://docs.google.com/presentation/d/1qYieXC0pG8_3H6xai685h_PRK9DwQypkdZF7tAaVzBM/edit?usp=sharing)
+- **Repository:** [Learn HTML Code Examples](https://github.com/supertestnet/learn-html)
+
 # HTML & Bitcoin: Building Your First Bitcoin Blog
 
 ## Lesson Overview

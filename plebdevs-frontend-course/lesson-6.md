@@ -5,6 +5,10 @@
 *You can access the lesson video directly here:*
 - [MP4 Format](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/course-1-lesson-6.mp4)
 
+## Additional Resources
+- **Slides:** [Pleb Wallet Demo Presentation](https://docs.google.com/presentation/d/1CXdnCi_I0R-lPi1XKnvDN0QL3atSlurWApvfEXf1n2M/edit?usp=sharing)
+- **Repository:** [Pleb Wallet React Code Examples](https://github.com/AustinKelsay/pleb-wallet-react)
+
 ## Lesson Overview
 Welcome to the final lesson of the PlebDevs Frontend Course! This is where we bring everything together and build a fully functional Lightning wallet using React. You'll transform from someone who understands individual web technologies into a developer who can build modern, component-based applications that scale.
 

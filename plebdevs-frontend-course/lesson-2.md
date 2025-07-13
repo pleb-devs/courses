@@ -3,6 +3,10 @@
 *You can access the lesson video directly here:*
 - [MP4 Format](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/course-1-lesson-2.mp4)
 
+## Additional Resources
+- **Slides:** [Learn CSS Presentation](https://docs.google.com/presentation/d/1yLyF8I1Sd0S_rGhPpblcboiHFLWaAe18xQ0wnWsBJOY/edit?usp=sharing)
+- **Repository:** [Learn CSS Code Examples](https://github.com/AustinKelsay/learn-css)
+
 # Learn CSS: Styling Your Bitcoin Wallet
 
 ## Lesson Overview

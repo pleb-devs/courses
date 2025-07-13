@@ -3,6 +3,9 @@
 *You can access the lesson video directly here:*
 - [MP4 Format](https://plebdevs-bucket.nyc3.cdn.digitaloceanspaces.com/course-1-lesson-4.mp4)
 
+## Additional Resources
+- **Slides:** [Development Environments Setup Presentation](https://docs.google.com/presentation/d/1mXp7dFQzVGE4sV9o8xYUW3woFWS5NzOUCbRyNrMWKl4/edit?usp=sharing)
+
 # Learn Development Environments: Setting Up Your Professional Workflow
 
 ## Lesson Overview
